@@ -1,0 +1,134 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a simple API"
+  version: "1.0.0"
+  title: "Simple Inventory API"
+  contact:
+    email: "fabio@fabio.vet.br"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/fabiosteixeira/Livraria/1.0.0"
+tags:
+- name: "books"
+  description: "Chamadas aos recursos relacionados aos livros"
+schemes:
+- "https"
+paths:
+  /books:
+    get:
+      tags:
+      - "books"
+      summary: "Lista completade livros"
+      description: "Retorna a lista completa de livros da livraria"
+      operationId: "getBooks"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Books"
+      x-swagger-router-controller: "Books"
+    post:
+      tags:
+      - "books"
+      summary: "Adiciona um novo livro"
+      operationId: "addBook"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto \"livro\" a ser inserido na livraria"
+        required: true
+        schema:
+          $ref: "#/definitions/Books"
+      responses:
+        405:
+          description: "Entrada inválida"
+      x-swagger-router-controller: "Books"
+  /books/{isbn}:
+    get:
+      tags:
+      - "books"
+      summary: "Busca um livro pelo isbn"
+      description: "Retorna um único livro pelo número isbn"
+      operationId: "getBooksByIsbn"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "isbn"
+        in: "path"
+        description: "Isbn do livro a ser retornado"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Books"
+        400:
+          description: "Isbn inválido"
+        404:
+          description: "Livro não encontrado"
+      x-swagger-router-controller: "Books"
+    delete:
+      tags:
+      - "books"
+      summary: "Deleta um livro"
+      operationId: "deleteBook"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "isbn"
+        in: "path"
+        description: "Isbn do livro a ser retornado"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        400:
+          description: "Isbn inválido"
+        404:
+          description: "Livro não encontrado"
+      x-swagger-router-controller: "Books"
+definitions:
+  Books:
+    type: "object"
+    required:
+    - "author"
+    - "editor"
+    - "isbn"
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      isbn:
+        type: "integer"
+        format: "int64"
+        example: "1234"
+      name:
+        type: "string"
+        example: "Nada dura para sempre"
+      author:
+        type: "string"
+        example: "Sidney Sheldon"
+      editor:
+        type: "string"
+        example: "Record"
+    example:
+      editor: "Record"
+      author: "Sidney Sheldon"
+      isbn: 6
+      name: "Nada dura para sempre"
+      id: 0
